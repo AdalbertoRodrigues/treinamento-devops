@@ -132,7 +132,7 @@ resource "aws_instance" "web2" {
 output "ssh" {
   value       = [
     for key, value in range(var.quantidade):
-      "ssh -i ~/key.pem ubuntu@${aws_instance.web2[key].public_ip}"
+      "${aws_instance.web2[key].private_ip}"
   ]
 }
 

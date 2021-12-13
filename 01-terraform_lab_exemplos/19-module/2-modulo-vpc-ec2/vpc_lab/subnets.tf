@@ -4,7 +4,7 @@ resource "aws_subnet" "subnet_1a" {
   availability_zone = "us-east-1a"
 
   tags = {
-    Name = "tf-lab-danilo-subnet-1a"
+    Name = "tf-lab-adalberto-subnet-1a"
   }
 }
 
@@ -14,7 +14,7 @@ resource "aws_subnet" "subnet_1b" {
   availability_zone = "us-east-1b"
 
   tags = {
-    Name = "tf-lab-danilo-subnet-1b"
+    Name = "tf-lab-adalberto-subnet-1b"
   }
 }
 
@@ -24,6 +24,6 @@ resource "aws_subnet" "subnet_1c" {
   availability_zone = "us-east-1c"
 
   tags = {
-    Name = "tf-lab-danilo-subnet-1c"
+    Name = "tf-lab-adalberto-subnet-1c"
   }
 }

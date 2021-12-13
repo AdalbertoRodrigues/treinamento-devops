@@ -5,12 +5,12 @@ provider "aws" {
 module "vpc_lab" {
   source     = "./vpc_lab"
   nome       = "Terraform VPC Modulo"
-  cidr_block = "172.17.0.0/16"
+  cidr_block = "172.10.0.0/16"
 }
 
 module "ec2_labs" {
   source    = "./ec2_lab"
-  nome      = "Uma maquina lab Terraform module"
+  nome      = "Uma maquina lab Terraform module - adalberto"
   vpc_id    = module.vpc_lab.vpc_id
   config    = [
     {
@@ -24,7 +24,7 @@ module "ec2_labs" {
       SubnetId = module.vpc_lab.subnet_1b_id
     },
     {
-      Tipo = "t2.large",
+      Tipo = "t2.micro",
       Nome = "003",
       SubnetId = module.vpc_lab.subnet_1c_id
     }

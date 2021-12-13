@@ -1,9 +1,9 @@
 variable nome {
   type        = string
-  description = "Nome da VPC"
+  description = "VPC-adalberto"
 }
 
 variable cidr_block {
   type        = string
-  description = "Nome da VPC"
+  description = "VPC-adalberto"
 }
