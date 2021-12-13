@@ -1,0 +1,86 @@
+- hosts: all
+  tasks:
+    - name: "Roda: sudo apt update"
+      become: yes
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #Um dia
+      
+    - name: "Instala pacotes em lote"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      become: yes # roda com sudo
+      with_items:
+        - mysql-server
+        - nginx
+        - maven
+        - python3-pycurl
+        - python3-mysqldb
+
+    - name: Clone a repo with separate git directory
+      git:
+        repo: https://github.com/AdalbertoRodrigues/spring-web-youtube
+        dest: app-java
+
+    - name: "Copia arquivo de configuração do nginx para o servidor"
+      copy:
+        src: 'default'
+        dest: '/etc/nginx/sites-available/'
+      become: yes
+
+    - name: "reiniciar nginx"
+      shell: systemctl restart nginx
+      become: yes
+
+    # - name: "Lavanta serviço do mysql"
+    #   become: yes
+    #   service:
+    #     name: mysql
+    #     state: started
+
+    # - name: "Criando senha root mysql"
+    #   become: yes
+    #   mysql_user:
+    #     name: root
+    #     host: localhost
+    #     password: root
+    #     priv: "*.*:ALL,GRANT"
+    #     state: present
+
+    # - name: "Cria o banco de dados MySQL"
+    #   mysql_db:
+    #     name: spring_web_youtube
+    #     login_user: root
+    #     login_password: root
+    #     state: present
+
+    # - name: "Criar variaveis de ambiente"
+    #   shell: "export DB_USER='root' & export PASSWORD='root' & export DATABASE_URL='mysql://localhost/spring_web_youtube'"
+    #   become: yes
+
+
+    # - name: "roda o maven package"
+    #   shell: mvn package
+    #   args:
+    #     chdir: ~/app-java
+    #   environment:
+    #     DB_USER: root
+    #     PASSWORD: root
+    #     DATABASE_URL: mysql://localhost:3306/spring_web_youtube
+
+    - name: "roda a aplicação"
+      shell: nohup java -jar *.jar &
+      args:
+        chdir: ~/app-java/target
+      environment:
+        DB_USER: root
+        PASSWORD: root
+        DATABASE_URL: mysql://localhost:3306/spring_web_youtube
+        
+
+    - shell: echo $DB_USER
+      register: ps
+    - debug: 
+        msg: "' {{ps.stdout_lines}} '"
