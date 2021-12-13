@@ -1,0 +1,47 @@
+- hosts: all
+  tasks:
+    - name: "Roda: sudo apt update"
+      become: yes
+      apt:
+        upgrade: yes
+        update_cache: yes
+        cache_valid_time: 86400 #Um dia
+      
+    - name: "Instala pacotes em lote"
+      apt:
+        name: "{{ item }}"
+        state: latest
+      become: yes # roda com sudo
+      with_items:
+        - apache2
+        - unzip
+
+    - name: "Download do template"
+      get_url:
+        url: "https://github.com/startbootstrap/startbootstrap-business-casual/archive/gh-pages.zip"
+        dest: "/tmp/gh-pages.zip"
+
+    - name: "Fazendo descompactação dos arquivos do WP"
+      unarchive:
+        src: "/tmp/gh-pages.zip"
+        dest: "/var/www/"
+        remote_src: yes
+      become: yes
+
+    - name: "altera apache"
+      replace:
+        path: '/etc/apache2/sites-available/000-default.conf'
+        regexp: "{{ item.regex }}"
+        replace: "{{ item.value }}"
+      with_items:
+        - { regex: '/var/www/html', value: '/var/www/startbootstrap-business-casual-gh-pages' }
+      become: yes
+
+    - name: "reiniciar apache"
+      shell: systemctl restart apache2
+      become: yes
+
+    - shell: ls /var/www/
+      register: ps
+    - debug: 
+        msg: "' {{ps.stdout_lines}} '"

@@ -17,6 +17,10 @@ id_rsa_itau_treinamento*
 # Crash log files
 crash.log
 
+#host do exercicio tf + ansible
+02-ansible/Exercicio/hosts
+
+
 # Exclude all .tfvars files, which are likely to contain sentitive data, such as
 # password, private keys, and other secrets. These should not be part of version
 # control as they are data points which are potentially sensitive and subject
